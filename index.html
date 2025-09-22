@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Xmodder script - Steal a brainrot</title>
+  <style>
+    body {
+      margin:0;
+      font-family: Consolas, monospace;
+      background: #0d0d0d;
+      color: #33ff33;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      overflow:hidden;
+    }
+    .card {
+      background: #111;
+      border: 1px solid #222;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 0 18px rgba(128,0,128,0.4);
+      max-width: 900px;
+      width: 95%;
+      animation: fadeIn 1.2s ease;
+    }
+    header {display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .logo {width:60px;height:60px;border-radius:10px;background:linear-gradient(135deg,purple,#4c1d95);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;}
+    h1 {margin:0;font-size:20px;color:#b26dff;text-shadow:0 0 6px #a855f7;}
+    .status-row{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}
+    .pill {padding:6px 12px;border-radius:999px;font-size:13px;display:flex;align-items:center;gap:8px;background:#1a1a1a;box-shadow:0 0 6px rgba(128,0,128,0.5)}
+    .dot {width:10px;height:10px;border-radius:50%}
+    .dot.green {background:#22c55e;box-shadow:0 0 6px #22c55e}
+    .dot.orange {background:#fbbf24;box-shadow:0 0 6px #fbbf24}
+    .meta {font-size:13px;color:#888;margin-bottom:16px}
+
+    .langs {display:grid;gap:14px;margin-top:16px}
+    .lang {
+      padding:14px;
+      border-radius:10px;
+      background:#1a0f1f;
+      border:1px solid #3b0764;
+      box-shadow:0 0 12px rgba(139,92,246,0.4);
+      animation: slideUp 0.8s ease both;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .lang:hover {transform:translateY(-4px);box-shadow:0 0 18px rgba(168,85,247,0.6)}
+    .lang h3{margin:0;font-size:14px;color:#c084fc}
+    .lang p{margin:6px 0 0;font-size:15px;color:#e5e5e5}
+
+    .controls {display:flex;gap:12px;align-items:center;margin-top:14px}
+    .btn {
+      padding:10px 16px;
+      border-radius:12px;
+      background:linear-gradient(90deg,#7c3aed,#4c1d95);
+      color:#fff;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.06);
+      cursor:pointer;
+      box-shadow:0 8px 30px rgba(124,58,237,0.18);
+      transition:transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s;
+      font-family:inherit;
+    }
+    .btn:active {transform:translateY(1px) scale(0.997)}
+    .btn.secondary {
+      background:#121015;
+      border:1px solid #2b0f3a;
+      color:#cbbcff;
+      box-shadow:inset 0 0 8px rgba(0,0,0,0.6);
+      font-weight:600;
+    }
+
+    .script-area{
+      margin-top:14px;
+      background:#0b0b0b;
+      padding:12px;
+      border-radius:8px;
+      border:1px solid #222;
+      font-family:monospace;
+      font-size:13px;
+      color:#33ff33;
+      box-shadow:inset 0 0 12px rgba(0,255,0,0.15);
+      overflow-x:auto;      /* horizontal scroll if needed */
+      white-space: pre-wrap; /* wrap long lines */
+      word-break: break-all; /* break long URLs to fit box */
+    }
+
+    footer{margin-top:18px;color:#555;font-size:12px;text-align:center}
+
+    @keyframes fadeIn {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes slideUp {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <header>
+      <div class="logo">XS</div>
+      <div><h1>Xmodder script - Steal a brainrot</h1></div>
+    </header>
+
+    <div class="status-row">
+      <div class="pill"><span class="dot green"></span>Status: <strong>Online</strong></div>
+      <div class="pill"><span class="dot green"></span>Script status: <strong>Online</strong></div>
+      <div class="pill"><span class="dot orange"></span>Server: <strong>Xmodder Network</strong></div>
+    </div>
+
+    <div class="meta">Conexión estable • Tiempo local: <span id="time">--:--:--</span></div>
+
+    <div class="langs">
+      <div class="lang"><h3>Español</h3><p>Pulsa <strong>Get key</strong></p></div>
+      <div class="lang"><h3>Português</h3><p>Clique em <strong>Get key</strong></p></div>
+      <div class="lang"><h3>English</h3><p>Click <strong>Get key</strong></p></div>
+    </div>
+
+    <div class="controls">
+      <button id="getKeyBtn" class="btn">Get key</button>
+      <button id="copyScriptBtn" class="btn secondary">Copy script (manual)</button>
+    </div>
+
+    <div class="script-area" id="scriptArea">
+loadstring(game:HttpGet("https://raw.githubusercontent.com/darkscripts124/PremiumScript/refs/heads/main/Script.lua"))()
+    </div>
+
+    <footer>© Xmodder — Steal a brainrot</footer>
+  </div>
+
+  <script>
+    const getKeyBtn = document.getElementById('getKeyBtn');
+    const copyScriptBtn = document.getElementById('copyScriptBtn');
+    const scriptArea = document.getElementById('scriptArea');
+
+    function updateTime(){
+      const now = new Date();
+      document.getElementById('time').textContent = now.toLocaleTimeString();
+    }
+    updateTime(); setInterval(updateTime,1000);
+
+    getKeyBtn.addEventListener('click', () => {
+      showToast('Redirigiendo a Roblox...');
+      window.location.href = 'https://www.roblox.com/share?code=1bec19472e46f24696bea06b346e92fa&type=Server';
+    });
+
+    copyScriptBtn.addEventListener('click', async () => {
+      const toCopy = scriptArea.textContent.trim();
+      try {
+        await navigator.clipboard.writeText(toCopy);
+        showToast('Script copiado al portapapeles.');
+      } catch {
+        showToast('No se pudo copiar. Usa Ctrl/Cmd+C manualmente.');
+      }
+    });
+
+    function showToast(msg){
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.position = 'fixed';
+      t.style.left = '50%';
+      t.style.top = '20px';
+      t.style.transform = 'translateX(-50%)';
+      t.style.padding = '14px 18px';
+      t.style.borderRadius = '12px';
+      t.style.background = 'rgba(88,28,135,0.95)';
+      t.style.color = '#e9d5ff';
+      t.style.border = '1px solid #a855f7';
+      t.style.boxShadow = '0 0 18px #a855f7';
+      t.style.zIndex = 9999;
+      t.style.opacity = '0';
+      t.style.transition = 'opacity 0.35s';
+      document.body.appendChild(t);
+      requestAnimationFrame(() => { t.style.opacity = '1'; });
+      setTimeout(() => { t.style.opacity = '0'; }, 2000);
+      setTimeout(() => t.remove(), 2600);
+    }
+  </script>
+</body>
+</html>
