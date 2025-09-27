@@ -16,6 +16,7 @@
       min-height:100vh;
       overflow:hidden;
     }
+    /* Emoji snow container */
     #emojiSnow {
       position: fixed;
       top: 0; left: 0;
@@ -23,21 +24,21 @@
       height: 100%;
       pointer-events: none;
       overflow: hidden;
-      z-index: 0;
+      z-index: 0; /* behind everything */
     }
-    .snowEmoji {
-      position: absolute;
-      font-size: 16px;
-      opacity: 0.9;
-      user-select: none;
-      pointer-events: none;
-      will-change: transform;
-      color: #7c3aed;
-      text-shadow: 0 0 6px #a855f7, 0 0 12px rgba(124,58,237,0.5);
-    }
+.snowEmoji {
+  position: absolute;
+  font-size: 16px;
+  opacity: 0.9;
+  user-select: none;
+  pointer-events: none;
+  will-change: transform;
+  color: #7c3aed; /* same purple as Get key button */
+  text-shadow: 0 0 6px #a855f7, 0 0 12px rgba(124,58,237,0.5);
+}
     .card {
       position: relative;
-      z-index: 1;
+      z-index: 1; /* above emojis */
       background: #111;
       border: 1px solid #222;
       padding: 24px;
@@ -55,6 +56,8 @@
     .dot {width:10px;height:10px;border-radius:50%}
     .dot.green {background:#22c55e;box-shadow:0 0 6px #22c55e}
     .dot.orange {background:#fbbf24;box-shadow:0 0 6px #fbbf24}
+    .meta {font-size:13px;color:#888;margin-bottom:16px}
+
     .langs {display:grid;gap:14px;margin-top:16px}
     .lang {
       padding:14px;
@@ -68,11 +71,12 @@
     .lang:hover {transform:translateY(-4px);box-shadow:0 0 18px rgba(168,85,247,0.6)}
     .lang h3{margin:0;font-size:14px;color:#c084fc}
     .lang p{margin:6px 0 0;font-size:15px;color:#e5e5e5}
+
     .controls {display:flex;gap:12px;align-items:center;margin-top:14px}
     .btn {
       padding:10px 16px;
       border-radius:12px;
-      background: #7c3aed;
+      background: #7c3aed; /* solid color */
       color:#fff;
       font-weight:700;
       border:1px solid rgba(255,255,255,0.06);
@@ -89,6 +93,7 @@
       box-shadow:inset 0 0 8px rgba(0,0,0,0.6);
       font-weight:600;
     }
+
     .script-area{
       margin-top:14px;
       background:#0b0b0b;
@@ -103,12 +108,15 @@
       white-space: pre;
       word-break: break-all;
     }
+
     footer{margin-top:18px;color:#555;font-size:12px;text-align:center}
+
     @keyframes fadeIn {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
     @keyframes slideUp {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
   </style>
 </head>
 <body>
+  <!-- Emoji snow background -->
   <div id="emojiSnow"></div>
 
   <div class="card">
@@ -148,12 +156,14 @@
     const devicePill = document.getElementById('devicePill');
     const countryPill = document.getElementById('countryPill');
 
+    // Detect mobile including iPad
     const isMobile = /iPhone|iPod|Android/i.test(navigator.userAgent) ||
                      navigator.userAgent.includes('iPad') ||
                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     devicePill.innerHTML = `<span class="dot green"></span>Your device: <strong>${isMobile ? 'Mobile' : 'PC'}</strong>`;
 
+    // Detect country
     async function getCountry() {
       try {
         const res = await fetch('https://ipapi.co/json/');
@@ -168,6 +178,7 @@
     }
     getCountry();
 
+    // Toast helper
     function showToast(msg){
       const t = document.createElement('div');
       t.textContent = msg;
@@ -190,6 +201,7 @@
       setTimeout(() => t.remove(), 2600);
     }
 
+    // Copy script
     copyScriptBtn.addEventListener('click', async () => {
       const toCopy = scriptArea.textContent.trim();
       try {
@@ -200,69 +212,35 @@
       }
     });
 
-    function showOpenInRobloxFallback(url) {
-      if (document.getElementById('openInRobloxFallback')) return;
-      const box = document.createElement('div');
-      box.id = 'openInRobloxFallback';
-      box.style.position = 'fixed';
-      box.style.bottom = '18px';
-      box.style.left = '50%';
-      box.style.transform = 'translateX(-50%)';
-      box.style.background = 'rgba(16,16,16,0.98)';
-      box.style.color = '#e6e6ff';
-      box.style.padding = '12px 16px';
-      box.style.borderRadius = '12px';
-      box.style.boxShadow = '0 8px 30px rgba(0,0,0,0.6)';
-      box.style.zIndex = 10000;
-      box.style.display = 'flex';
-      box.style.gap = '10px';
-      box.style.alignItems = 'center';
-      box.innerHTML = `
-        <div style="font-weight:700">Open this page in Roblox</div>
-        <a id="openRobloxLink" href="${url}" target="_blank" rel="noopener" style="padding:8px 12px;border-radius:10px;background:#7c3aed;color:white;text-decoration:none;font-weight:700">Open</a>
-        <button id="closeFallback" style="margin-left:8px;padding:6px 10px;border-radius:8px;border:none;background:#222;color:#ccc;cursor:pointer">Close</button>
-      `;
-      document.body.appendChild(box);
-      document.getElementById('closeFallback').addEventListener('click', () => { box.remove(); });
-    }
-
+    // Get Key button
     getKeyBtn.addEventListener('click', () => {
-      const robloxLink = 'https://www.roblox.com/share?code=d373c29545b0634faab755dd081a8d8b&type=Server';
+      const robloxUrl = 'https://www.roblox.com/games/109983668079237/Steal-a-Brainrot?privateServerLinkCode=68923678418952071082513062638384';
       if(isMobile){
-        showToast('Opening Roblox...');
-        // redirect to Roblox page
-        window.location.href = 'https://www.roblox.com/games/109983668079237/Steal-a-Brainrot?privateServerLinkCode=68923678418952071082513062638384';
-        // auto return after 1.8s
-        setTimeout(()=>{
-          window.location.href = 'https://xmodder.vercel.app';
-        },1800);
+        // on mobile: open normal new tab (prompt handled by OS)
+        window.open(robloxUrl, '_blank');
       } else {
-        const tinyWindow = window.open(
-          robloxLink,
-          '_blank',
-          'width=400,height=600,top=50,left=50,scrollbars=no,resizable=no'
-        );
-        if (!tinyWindow) {
-          showToast('Popup blocked. Please tap "Open in Roblox" below.');
-          showOpenInRobloxFallback(robloxLink);
+        // on PC: popup with rapid random movement
+        const width = 400, height = 600;
+        const popup = window.open(robloxUrl, '_blank', `width=${width},height=${height},scrollbars=no,resizable=no`);
+        if(popup){
+          let x = 0, y = 0, dx = 20, dy = 15;
+          const interval = setInterval(() => {
+            x += dx; y += dy;
+            popup.moveTo(x, y);
+            if(x < 0 || x > screen.width - width) dx *= -1;
+            if(y < 0 || y > screen.height - height) dy *= -1;
+          }, 40);
+          setTimeout(() => {
+            clearInterval(interval);
+            popup.close();
+          }, 3000);
         } else {
-          try { tinyWindow.focus(); } catch(e){}
-          showToast('Attempting to open Roblox...');
-          const popupDisplayMs = 1200;
-          const timer = setTimeout(() => {
-            try { tinyWindow.close(); } catch(e){}
-            showOpenInRobloxFallback(robloxLink);
-          }, popupDisplayMs);
-          const checkInterval = setInterval(() => {
-            if (tinyWindow.closed) {
-              clearTimeout(timer);
-              clearInterval(checkInterval);
-            }
-          }, 150);
+          showToast('Popup blocked! Please allow popups.');
         }
       }
     });
 
+    // Emoji snow effect
     const emojis = ["⟡","°",".","⋆","༺","☾","𖤓","༻"];
     const snowCount = 30;
     const snowContainer = document.getElementById("emojiSnow");
