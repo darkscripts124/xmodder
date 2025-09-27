@@ -2,20 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <title>Xmodder</title>
   <style>
+    * { box-sizing: border-box; }
+
     body {
-      margin:0;
+      margin: 0;
       font-family: Consolas, monospace;
       background: #0d0d0d;
       color: #33ff33;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      min-height:100vh;
-      overflow:hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
     }
+
     /* Emoji snow container */
     #emojiSnow {
       position: fixed;
@@ -24,92 +27,166 @@
       height: 100%;
       pointer-events: none;
       overflow: hidden;
-      z-index: 0; /* behind everything */
+      z-index: 0;
     }
-.snowEmoji {
-  position: absolute;
-  font-size: 16px;
-  opacity: 0.9;
-  user-select: none;
-  pointer-events: none;
-  will-change: transform;
-  color: #7c3aed; /* same purple as Get key button */
-  text-shadow: 0 0 6px #a855f7, 0 0 12px rgba(124,58,237,0.5);
-}
+    .snowEmoji {
+      position: absolute;
+      font-size: 16px;
+      opacity: 0.9;
+      user-select: none;
+      pointer-events: none;
+      will-change: transform;
+      color: #7c3aed;
+      text-shadow: 0 0 6px #a855f7, 0 0 12px rgba(124,58,237,0.5);
+    }
+
     .card {
       position: relative;
-      z-index: 1; /* above emojis */
+      z-index: 1;
       background: #111;
       border: 1px solid #222;
-      padding: 24px;
-      border-radius: 12px;
+      padding: clamp(12px, 3vw, 28px);
+      border-radius: 1rem;
       box-shadow: 0 0 18px rgba(128,0,128,0.4);
-      max-width: 900px;
       width: 95%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow-y: auto;
       animation: fadeIn 1.2s ease;
     }
-    header {display:flex;align-items:center;gap:16px;margin-bottom:18px}
-    .logo {width:60px;height:60px;border-radius:10px;background:linear-gradient(135deg,purple,#4c1d95);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;}
-    h1 {margin:0;font-size:20px;color:#b26dff;text-shadow:0 0 6px #a855f7;}
-    .status-row{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}
-    .pill {padding:6px 12px;border-radius:999px;font-size:13px;display:flex;align-items:center;gap:8px;background:#1a1a1a;box-shadow:0 0 6px rgba(128,0,128,0.5)}
-    .dot {width:10px;height:10px;border-radius:50%}
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: clamp(8px, 2vw, 18px);
+      margin-bottom: clamp(12px, 2.5vh, 20px);
+    }
+
+    .logo {
+      width: clamp(40px, 8vw, 70px);
+      height: clamp(40px, 8vw, 70px);
+      border-radius: 10px;
+      background: linear-gradient(135deg, purple, #4c1d95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: clamp(12px, 3vw, 20px);
+      color: #fff;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(14px, 3vw, 22px);
+      color: #b26dff;
+      text-shadow: 0 0 6px #a855f7;
+    }
+
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(8px, 2vw, 14px);
+      margin: clamp(8px, 2vh, 16px) 0;
+    }
+
+    .pill {
+      padding: clamp(4px, 1vw, 8px) clamp(8px, 2vw, 14px);
+      border-radius: 999px;
+      font-size: clamp(11px, 2vw, 14px);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1a1a1a;
+      box-shadow: 0 0 6px rgba(128,0,128,0.5);
+    }
+
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
     .dot.green {background:#22c55e;box-shadow:0 0 6px #22c55e}
     .dot.orange {background:#fbbf24;box-shadow:0 0 6px #fbbf24}
-    .meta {font-size:13px;color:#888;margin-bottom:16px}
 
-    .langs {display:grid;gap:14px;margin-top:16px}
+    .langs {
+      display: grid;
+      gap: clamp(10px, 2vw, 16px);
+      margin-top: clamp(10px, 2vh, 18px);
+    }
     .lang {
-      padding:14px;
-      border-radius:10px;
-      background:#1a0f1f;
-      border:1px solid #3b0764;
-      box-shadow:0 0 12px rgba(139,92,246,0.4);
+      padding: clamp(10px, 3vw, 16px);
+      border-radius: 10px;
+      background: #1a0f1f;
+      border: 1px solid #3b0764;
+      box-shadow: 0 0 12px rgba(139,92,246,0.4);
       animation: slideUp 0.8s ease both;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .lang:hover {transform:translateY(-4px);box-shadow:0 0 18px rgba(168,85,247,0.6)}
-    .lang h3{margin:0;font-size:14px;color:#c084fc}
-    .lang p{margin:6px 0 0;font-size:15px;color:#e5e5e5}
+    .lang:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 18px rgba(168,85,247,0.6);
+    }
+    .lang h3 {
+      margin: 0;
+      font-size: clamp(12px, 2.5vw, 16px);
+      color: #c084fc;
+    }
+    .lang p {
+      margin: 6px 0 0;
+      font-size: clamp(12px, 2.5vw, 16px);
+      color: #e5e5e5;
+    }
 
-    .controls {display:flex;gap:12px;align-items:center;margin-top:14px}
+    .controls {
+      display: flex;
+      gap: clamp(8px, 2vw, 14px);
+      align-items: center;
+      margin-top: clamp(10px, 2vh, 16px);
+      flex-wrap: wrap;
+    }
+
     .btn {
-      padding:10px 16px;
-      border-radius:12px;
-      background: #7c3aed; /* solid color */
-      color:#fff;
-      font-weight:700;
-      border:1px solid rgba(255,255,255,0.06);
-      cursor:pointer;
-      box-shadow:0 8px 30px rgba(124,58,237,0.18);
-      transition:transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s;
-      font-family:inherit;
+      padding: clamp(8px, 2vw, 12px) clamp(12px, 4vw, 20px);
+      border-radius: 12px;
+      background: #7c3aed;
+      color: #fff;
+      font-weight: 700;
+      font-size: clamp(12px, 3vw, 16px);
+      border: 1px solid rgba(255,255,255,0.06);
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(124,58,237,0.18);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s;
+      font-family: inherit;
     }
     .btn:active {transform:translateY(1px) scale(0.997)}
     .btn.secondary {
-      background:#121015;
-      border:1px solid #2b0f3a;
-      color:#cbbcff;
-      box-shadow:inset 0 0 8px rgba(0,0,0,0.6);
-      font-weight:600;
+      background: #121015;
+      border: 1px solid #2b0f3a;
+      color: #cbbcff;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      font-weight: 600;
     }
 
-    .script-area{
-      margin-top:14px;
-      background:#0b0b0b;
-      padding:12px;
-      border-radius:8px;
-      border:1px solid #222;
-      font-family:monospace;
-      font-size:13px;
-      color:#33ff33;
-      box-shadow:inset 0 0 12px rgba(0,255,0,0.15);
-      overflow-x:auto;
-      white-space: pre;
-      word-break: break-all;
+    .script-area {
+      margin-top: clamp(10px, 2vh, 14px);
+      background: #0b0b0b;
+      padding: clamp(8px, 2vw, 14px);
+      border-radius: 8px;
+      border: 1px solid #222;
+      font-family: monospace;
+      font-size: clamp(11px, 2vw, 14px);
+      color: #33ff33;
+      box-shadow: inset 0 0 12px rgba(0,255,0,0.15);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    footer{margin-top:18px;color:#555;font-size:12px;text-align:center}
+    footer {
+      margin-top: clamp(12px, 2vh, 18px);
+      color: #555;
+      font-size: clamp(10px, 2vw, 13px);
+      text-align: center;
+    }
 
     @keyframes fadeIn {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
     @keyframes slideUp {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -122,7 +199,7 @@
   <div class="card">
     <header>
       <div class="logo">XS</div>
-      <div><h1>Xmodder Script - Steal A Brainrot ㄨ </h1></div>
+      <div><h1>Xmodder Script - Steal A Brainrot ㄨ</h1></div>
     </header>
 
     <div class="status-row">
@@ -144,7 +221,9 @@
       <button id="copyScriptBtn" class="btn secondary">Copy script (manual)</button>
     </div>
 
-    <div class="script-area" id="scriptArea">loadstring(game:HttpGet("https://raw.githubusercontent.com/vert124/PremiumScript/refs/heads/main/Script.lua"))()</div>
+    <div class="script-area" id="scriptArea">
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/vert124/PremiumScript/refs/heads/main/Script.lua"))()
+    </div>
 
     <footer>© Xmodder — Steal a brainrot</footer>
   </div>
@@ -160,7 +239,6 @@
     const isMobile = /iPhone|iPod|Android/i.test(navigator.userAgent) ||
                      navigator.userAgent.includes('iPad') ||
                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
     devicePill.innerHTML = `<span class="dot green"></span>Your device: <strong>${isMobile ? 'Mobile' : 'PC'}</strong>`;
 
     // Detect country
@@ -228,12 +306,11 @@
           showToast('No se pudo abrir automáticamente. Haz clic y confirma.');
         } else {
           showToast('Auto Pasting your key in Roblox...');
-          // Chaotic teleport movement
           let interval = setInterval(() => {
             const x = Math.random() * (screen.width - 100);
             const y = Math.random() * (screen.height - 100);
             tinyWindow.moveTo(x, y);
-          }, 10); // super fast updates
+          }, 10);
           setTimeout(() => {
             clearInterval(interval);
             tinyWindow.close();
