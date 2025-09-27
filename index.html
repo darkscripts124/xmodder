@@ -76,7 +76,7 @@ footer{margin-top:18px;color:#555;font-size:12px;text-align:center}
   h1 {font-size:16px;}
   .lang {padding:6px 10px;}
   .lang h3 {font-size:12px;}
-  .lang p {font-size:12px;}
+  .lang p{font-size:12px;}
   .btn {padding:6px 10px;font-size:13px;}
   .script-area {font-size:12px;padding:8px;}
   .status-row {gap:6px;}
@@ -92,13 +92,14 @@ footer{margin-top:18px;color:#555;font-size:12px;text-align:center}
     <div><h1>Xmodder Script - Steal A Brainrot ㄨ </h1></div>
   </header>
 
-  <div class="status-row">
-    <div class="pill" id="devicePill"><span class="dot green"></span>Your device: <strong>--</strong></div>
-    <div class="pill"><span class="dot green"></span>Status: <strong>Online</strong></div>
-    <div class="pill"><span class="dot green"></span>Script status: <strong>Online</strong></div>
-    <div class="pill"><span class="dot orange"></span>Server: <strong>Xmodder Network</strong></div>
-    <div class="pill" id="countryPill"><span class="dot green"></span>Country: <strong>--</strong></div>
-  </div>
+<div class="status-row">
+  <div class="pill" id="devicePill"><span class="dot green"></span>Your device: <strong>--</strong></div>
+  <div class="pill"><span class="dot green"></span>Status: <strong>Online</strong></div>
+  <!-- Script status pill removed -->
+  <div class="pill"><span class="dot orange"></span>Server: <strong>Xmodder Network</strong></div>
+  <div class="pill" id="countryPill"><span class="dot green"></span>Country: <strong>--</strong></div>
+</div>
+
 
   <div class="langs">
     <div class="lang"><h3>Español 🇪🇸</h3><p>Pulsa <strong>Get key</strong></p></div>
@@ -196,7 +197,7 @@ function animateSnow(){
   snowElements.forEach(el=>{
     let top = parseFloat(el.style.top);
     let left = parseFloat(el.style.left);
-    let speed = 0.5 + Math.random()*2;
+    let speed = 0.5 + Math.random()*4.16767676767674141414141;
     let sway = Math.sin(left/20)*1.5;
     left += speed;
     top += sway;
