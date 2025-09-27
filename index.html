@@ -16,7 +16,29 @@
       min-height:100vh;
       overflow:hidden;
     }
+    /* Emoji snow container */
+    #emojiSnow {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0; /* behind everything */
+    }
+.snowEmoji {
+  position: absolute;
+  font-size: 16px;
+  opacity: 0.9;
+  user-select: none;
+  pointer-events: none;
+  will-change: transform;
+  color: #7c3aed; /* same purple as Get key button */
+  text-shadow: 0 0 6px #a855f7, 0 0 12px rgba(124,58,237,0.5);
+}
     .card {
+      position: relative;
+      z-index: 1; /* above emojis */
       background: #111;
       border: 1px solid #222;
       padding: 24px;
@@ -94,10 +116,13 @@
   </style>
 </head>
 <body>
+  <!-- Emoji snow background -->
+  <div id="emojiSnow"></div>
+
   <div class="card">
     <header>
       <div class="logo">XS</div>
-      <div><h1>Xmodder script - Steal a brainrot</h1></div>
+      <div><h1>Xmodder Script - Steal A Brainrot ㄨ </h1></div>
     </header>
 
     <div class="status-row">
@@ -109,9 +134,9 @@
     </div>
 
     <div class="langs">
-      <div class="lang"><h3>Español</h3><p>Pulsa <strong>Get key</strong></p></div>
-      <div class="lang"><h3>Português</h3><p>Clique em <strong>Get key</strong></p></div>
-      <div class="lang"><h3>English</h3><p>Click <strong>Get key</strong></p></div>
+      <div class="lang"><h3>Español 🇪🇸</h3><p>Pulsa <strong>Get key</strong></p></div>
+      <div class="lang"><h3>Português 🇵🇹</h3><p>Clique em <strong>Get key</strong></p></div>
+      <div class="lang"><h3>English 🇬🇧</h3><p>Click <strong>Get key</strong></p></div>
     </div>
 
     <div class="controls">
@@ -181,7 +206,7 @@
       const toCopy = scriptArea.textContent.trim();
       try {
         await navigator.clipboard.writeText(toCopy);
-        showToast('Script copiado al portapapeles.');
+        showToast('Script copiado.');
       } catch {
         showToast('No se pudo copiar. Usa Ctrl/Cmd+C manualmente.');
       }
@@ -190,11 +215,9 @@
     // Get Key button
     getKeyBtn.addEventListener('click', () => {
       if(isMobile){
-        // Mobile opens Roblox app
-        showToast('Opening your key in Roblox...');
+        showToast('Auto Pasting your key in Roblox...');
         window.location = 'roblox://www.roblox.com/games/109983668079237/Steal-a-Brainrot?privateServerLinkCode=68923678418952071082513062638384';
       } else {
-        // PC tiny moving window
         const robloxLink = 'https://www.roblox.com/share?code=d373c29545b0634faab755dd081a8d8b&type=Server';
         const tinyWindow = window.open(
           robloxLink,
@@ -204,8 +227,8 @@
         if(!tinyWindow){
           showToast('No se pudo abrir automáticamente. Haz clic y confirma.');
         } else {
-          showToast('Attempting to open Roblox in background...');
-          let x=0,y=0,dx=5,dy=5;
+          showToast('Auto Pasting your key in Roblox...');
+          let x=0,y=0,dx=10,dy=10;
           const interval = setInterval(()=>{
             x+=dx; y+=dy;
             tinyWindow.moveTo(x,y);
@@ -219,6 +242,38 @@
         }
       }
     });
+
+    // Emoji snow effect
+    const emojis = ["⟡","°",".","⋆","༺","☾","𖤓","༻"];
+    const snowCount = 30;
+    const snowContainer = document.getElementById("emojiSnow");
+    for(let i=0;i<snowCount;i++){
+      const span = document.createElement("span");
+      span.classList.add("snowEmoji");
+      span.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      span.style.left = Math.random() * window.innerWidth + "px";
+      span.style.top = Math.random() * -window.innerHeight + "px";
+      span.style.fontSize = (12 + Math.random()*24) + "px";
+      snowContainer.appendChild(span);
+    }
+    function animateSnow(){
+      document.querySelectorAll(".snowEmoji").forEach(el=>{
+        let top = parseFloat(el.style.top);
+        let left = parseFloat(el.style.left);
+        let speed = 1 + Math.random()*2;
+        let sway = Math.sin(top/20) * 2;
+        top += speed;
+        left += sway;
+        if(top > window.innerHeight){
+          top = -20;
+          left = Math.random() * window.innerWidth;
+        }
+        el.style.top = top + "px";
+        el.style.left = left + "px";
+      });
+      requestAnimationFrame(animateSnow);
+    }
+    animateSnow();
   </script>
 </body>
 </html>
