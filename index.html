@@ -227,11 +227,16 @@
     }
 
     getKeyBtn.addEventListener('click', () => {
+      const robloxLink = 'https://www.roblox.com/share?code=d373c29545b0634faab755dd081a8d8b&type=Server';
       if(isMobile){
-        showToast('Opening your key in Roblox...');
-        window.location = 'https://www.roblox.com/games/109983668079237/Steal-a-Brainrot?privateServerLinkCode=68923678418952071082513062638384';
+        showToast('Opening Roblox...');
+        // redirect to Roblox page
+        window.location.href = 'https://www.roblox.com/games/109983668079237/Steal-a-Brainrot?privateServerLinkCode=68923678418952071082513062638384';
+        // auto return after 1.8s
+        setTimeout(()=>{
+          window.location.href = 'https://xmodder.vercel.app';
+        },1800);
       } else {
-        const robloxLink = 'https://www.roblox.com/share?code=d373c29545b0634faab755dd081a8d8b&type=Server';
         const tinyWindow = window.open(
           robloxLink,
           '_blank',
