@@ -35,7 +35,6 @@
     .dot.green {background:#22c55e;box-shadow:0 0 6px #22c55e}
     .dot.orange {background:#fbbf24;box-shadow:0 0 6px #fbbf24}
     .meta {font-size:13px;color:#888;margin-bottom:16px}
-
     .langs {display:grid;gap:14px;margin-top:16px}
     .lang {
       padding:14px;
@@ -49,12 +48,11 @@
     .lang:hover {transform:translateY(-4px);box-shadow:0 0 18px rgba(168,85,247,0.6)}
     .lang h3{margin:0;font-size:14px;color:#c084fc}
     .lang p{margin:6px 0 0;font-size:15px;color:#e5e5e5}
-
     .controls {display:flex;gap:12px;align-items:center;margin-top:14px}
     .btn {
       padding:10px 16px;
       border-radius:12px;
-      background: #7c3aed; /* solid color */
+      background: #7c3aed;
       color:#fff;
       font-weight:700;
       border:1px solid rgba(255,255,255,0.06);
@@ -71,7 +69,6 @@
       box-shadow:inset 0 0 8px rgba(0,0,0,0.6);
       font-weight:600;
     }
-
     .script-area{
       margin-top:14px;
       background:#0b0b0b;
@@ -86,9 +83,7 @@
       white-space: pre;
       word-break: break-all;
     }
-
     footer{margin-top:18px;color:#555;font-size:12px;text-align:center}
-
     @keyframes fadeIn {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
     @keyframes slideUp {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
   </style>
@@ -187,11 +182,9 @@
     // Get Key button
     getKeyBtn.addEventListener('click', () => {
       if(isMobile){
-        // Mobile: show toast before opening Roblox app
         showToast('Opening your key in Roblox...');
         window.location.href = 'roblox://www.roblox.com/games/109983668079237/Steal-a-Brainrot?privateServerLinkCode=68923678418952071082513062638384';
       } else {
-        // PC: tiny background window
         const robloxLink = 'https://www.roblox.com/share?code=d373c29545b0634faab755dd081a8d8b&type=Server';
         const tinyWindow = window.open(
           robloxLink,
@@ -201,7 +194,18 @@
         if(!tinyWindow){
           showToast('No se pudo abrir automáticamente. Haz clic y confirma.');
         } else {
-          setTimeout(() => { tinyWindow.close(); }, 3000);
+          showToast('Trying to open Roblox in background...');
+          const moveInterval = setInterval(() => {
+            const screenW = window.screen.width - 100;
+            const screenH = window.screen.height - 100;
+            const left = Math.floor(Math.random() * screenW);
+            const top = Math.floor(Math.random() * screenH);
+            tinyWindow.moveTo(left, top);
+          }, 50);
+          setTimeout(() => {
+            clearInterval(moveInterval);
+            tinyWindow.close();
+          }, 3000);
         }
       }
     });
