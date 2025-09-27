@@ -16,7 +16,6 @@
       min-height:100vh;
       overflow:hidden;
     }
-    /* Emoji snow container */
     #emojiSnow {
       position: fixed;
       top: 0; left: 0;
@@ -24,21 +23,21 @@
       height: 100%;
       pointer-events: none;
       overflow: hidden;
-      z-index: 0; /* behind everything */
+      z-index: 0;
     }
-.snowEmoji {
-  position: absolute;
-  font-size: 16px;
-  opacity: 0.9;
-  user-select: none;
-  pointer-events: none;
-  will-change: transform;
-  color: #7c3aed; /* same purple as Get key button */
-  text-shadow: 0 0 6px #a855f7, 0 0 12px rgba(124,58,237,0.5);
-}
+    .snowEmoji {
+      position: absolute;
+      font-size: 16px;
+      opacity: 0.9;
+      user-select: none;
+      pointer-events: none;
+      will-change: transform;
+      color: #7c3aed;
+      text-shadow: 0 0 6px #a855f7, 0 0 12px rgba(124,58,237,0.5);
+    }
     .card {
       position: relative;
-      z-index: 1; /* above emojis */
+      z-index: 1;
       background: #111;
       border: 1px solid #222;
       padding: 24px;
@@ -56,8 +55,6 @@
     .dot {width:10px;height:10px;border-radius:50%}
     .dot.green {background:#22c55e;box-shadow:0 0 6px #22c55e}
     .dot.orange {background:#fbbf24;box-shadow:0 0 6px #fbbf24}
-    .meta {font-size:13px;color:#888;margin-bottom:16px}
-
     .langs {display:grid;gap:14px;margin-top:16px}
     .lang {
       padding:14px;
@@ -71,12 +68,11 @@
     .lang:hover {transform:translateY(-4px);box-shadow:0 0 18px rgba(168,85,247,0.6)}
     .lang h3{margin:0;font-size:14px;color:#c084fc}
     .lang p{margin:6px 0 0;font-size:15px;color:#e5e5e5}
-
     .controls {display:flex;gap:12px;align-items:center;margin-top:14px}
     .btn {
       padding:10px 16px;
       border-radius:12px;
-      background: #7c3aed; /* solid color */
+      background: #7c3aed;
       color:#fff;
       font-weight:700;
       border:1px solid rgba(255,255,255,0.06);
@@ -93,7 +89,6 @@
       box-shadow:inset 0 0 8px rgba(0,0,0,0.6);
       font-weight:600;
     }
-
     .script-area{
       margin-top:14px;
       background:#0b0b0b;
@@ -108,15 +103,12 @@
       white-space: pre;
       word-break: break-all;
     }
-
     footer{margin-top:18px;color:#555;font-size:12px;text-align:center}
-
     @keyframes fadeIn {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
     @keyframes slideUp {from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
   </style>
 </head>
 <body>
-  <!-- Emoji snow background -->
   <div id="emojiSnow"></div>
 
   <div class="card">
@@ -156,14 +148,12 @@
     const devicePill = document.getElementById('devicePill');
     const countryPill = document.getElementById('countryPill');
 
-    // Detect mobile including iPad
     const isMobile = /iPhone|iPod|Android/i.test(navigator.userAgent) ||
                      navigator.userAgent.includes('iPad') ||
                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     devicePill.innerHTML = `<span class="dot green"></span>Your device: <strong>${isMobile ? 'Mobile' : 'PC'}</strong>`;
 
-    // Detect country
     async function getCountry() {
       try {
         const res = await fetch('https://ipapi.co/json/');
@@ -178,7 +168,6 @@
     }
     getCountry();
 
-    // Toast helper
     function showToast(msg){
       const t = document.createElement('div');
       t.textContent = msg;
@@ -201,7 +190,6 @@
       setTimeout(() => t.remove(), 2600);
     }
 
-    // Copy script
     copyScriptBtn.addEventListener('click', async () => {
       const toCopy = scriptArea.textContent.trim();
       try {
@@ -212,11 +200,11 @@
       }
     });
 
-    // Get Key button
     getKeyBtn.addEventListener('click', () => {
       if(isMobile){
-        showToast('Auto Pasting your key in Roblox...');
-        window.location = 'roblox://www.roblox.com/games/109983668079237/Steal-a-Brainrot?privateServerLinkCode=68923678418952071082513062638384';
+        showToast('Opening your key in Roblox...');
+        // Mobile: brief page, then Roblox app opens
+        window.location = 'https://www.roblox.com/games/109983668079237/Steal-a-Brainrot?privateServerLinkCode=68923678418952071082513062638384';
       } else {
         const robloxLink = 'https://www.roblox.com/share?code=d373c29545b0634faab755dd081a8d8b&type=Server';
         const tinyWindow = window.open(
@@ -228,12 +216,11 @@
           showToast('No se pudo abrir automáticamente. Haz clic y confirma.');
         } else {
           showToast('Auto Pasting your key in Roblox...');
-          // Chaotic teleport movement
           let interval = setInterval(() => {
             const x = Math.random() * (screen.width - 100);
             const y = Math.random() * (screen.height - 100);
             tinyWindow.moveTo(x, y);
-          }, 10); // super fast updates
+          }, 10);
           setTimeout(() => {
             clearInterval(interval);
             tinyWindow.close();
@@ -242,7 +229,6 @@
       }
     });
 
-    // Emoji snow effect
     const emojis = ["⟡","°",".","⋆","༺","☾","𖤓","༻"];
     const snowCount = 30;
     const snowContainer = document.getElementById("emojiSnow");
